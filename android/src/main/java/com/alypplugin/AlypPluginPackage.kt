@@ -1,33 +1,15 @@
 package com.alypplugin
 
-import com.facebook.react.BaseReactPackage
-import com.facebook.react.bridge.NativeModule
+import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.module.model.ReactModuleInfo
-import com.facebook.react.module.model.ReactModuleInfoProvider
-import java.util.HashMap
+import com.facebook.react.bridge.NativeModule
+import com.facebook.react.uimanager.ViewManager
 
-class AlypPluginPackage : BaseReactPackage() {
-  override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? {
-    return if (name == AlypPluginModule.NAME) {
-      AlypPluginModule(reactContext)
-    } else {
-      null
-    }
-  }
+class AlypPluginPackage : ReactPackage {
 
-  override fun getReactModuleInfoProvider(): ReactModuleInfoProvider {
-    return ReactModuleInfoProvider {
-      val moduleInfos: MutableMap<String, ReactModuleInfo> = HashMap()
-      moduleInfos[AlypPluginModule.NAME] = ReactModuleInfo(
-        AlypPluginModule.NAME,
-        AlypPluginModule.NAME,
-        false,  // canOverrideExistingModule
-        false,  // needsEagerInit
-        false,  // isCxxModule
-        true // isTurboModule
-      )
-      moduleInfos
-    }
-  }
+  override fun createNativeModules(rc: ReactApplicationContext): List<NativeModule> =
+    listOf(AlypPluginModule(rc))
+
+  override fun createViewManagers(rc: ReactApplicationContext): List<ViewManager<*, *>> =
+    listOf(SecurePanelManager())   // register your View
 }
